@@ -1,70 +1,90 @@
-# Getting Started with Create React App
+# AES Cipher
+AES (Advanced Encryption Standard) is a widely used symmetric encryption algorithm that was adopted by the US National Institute of Standards and Technology (NIST) in 2001. It was developed as a replacement for the older DES (Data Encryption Standard) algorithm, which was found to be vulnerable to attack. AES uses a fixed-length key to encrypt and decrypt data, with key lengths of 128, 192, or 256 bits.
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+AES is a block cipher, meaning that it operates on fixed-size blocks of data (128 bits) and uses a symmetric key for both encryption and decryption. In the AES algorithm, the plaintext is transformed into ciphertext through a series of mathematical operations involving the key, known as rounds. The number of rounds used in the encryption process depends on the key length: 10 rounds for 128-bit keys, 12 rounds for 192-bit keys, and 14 rounds for 256-bit keys.
 
-## Available Scripts
+AES is considered to be very secure and is used in a variety of applications, including encrypting data sent over the internet (e.g. in HTTPS connections), encrypting files on a computer, and protecting sensitive government information.
 
-In the project directory, you can run:
+```
+function AES_Encrypt(plaintext, key)
+    block_size = 128 bits
+    key_size = 128, 192, or 256 bits
+    n_rounds = 10, 12, or 14 depending on key size
+    state = plaintext
+    key_schedule = GenerateKeySchedule(key, key_size, n_rounds)
+    for i = 1 to n_rounds
+        state = AddRoundKey(state, key_schedule[i])
+        state = SubBytes(state)
+        state = ShiftRows(state)
+        state = MixColumns(state)
+    state = AddRoundKey(state, key_schedule[n_rounds+1])
+    return state
 
-### `npm start`
+function AES_Decrypt(ciphertext, key)
+    block_size = 128 bits
+    key_size = 128, 192, or 256 bits
+    n_rounds = 10, 12, or 14 depending on key size
+    state = ciphertext
+    key_schedule = GenerateKeySchedule(key, key_size, n_rounds)
+    for i = n_rounds+1 to 1
+        state = AddRoundKey(state, key_schedule[i])
+        state = InvShiftRows(state)
+        state = InvSubBytes(state)
+        state = MixColumns(state)
+    state = AddRoundKey(state, key_schedule[0])
+    return state
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+```
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+# Caesar Cipher
+The Caesar Cipher is a very basic substitution cipher that was used by the Roman empire to encode messages. It involves replacing each letter in a message with a letter that is a certain number of positions down the alphabet. For example, if the shift value (also known as the key) is 3, the letter 'A' would be replaced with 'D', 'B' would be replaced with 'E', and so on. The shift value is chosen by the sender and must be known by the recipient in order to decrypt the message.
 
-### `npm test`
+The Caesar Cipher is very easy to break, especially since the shift value is usually small (1-25) and there are only 26 possible shift values. It can be easily broken using simple frequency analysis, which involves looking at the frequency of each letter in the ciphertext and comparing it to the known frequency of letters in the language of the plaintext.
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+```
+function Caesar_Encrypt(plaintext, shift)
+    ciphertext = ""
+    for each character in plaintext
+        if character is a letter
+            ciphertext += shift_letter(character, shift)
+        else
+            ciphertext += character
+    return ciphertext
 
-### `npm run build`
+function Caesar_Decrypt(ciphertext, shift)
+    plaintext = ""
+    for each character in ciphertext
+        if character is a letter
+            plaintext += shift_letter(character, -shift)
+        else
+            plaintext += character
+    return plaintext
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+function shift_letter(letter, shift)
+    return chr((ord(letter) - 65 + shift) % 26 + 65)
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+```
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+# XOR Cipher
+The XOR cipher is a type of symmetric key encryption algorithm that uses the XOR (exclusive or) logical operator to combine the plaintext with a key to create the ciphertext. The key is used to encrypt and decrypt the message, and it must be kept secret to maintain the security of the message.
 
-### `npm run eject`
+The XOR cipher is a simple encryption algorithm, but it can be very effective if the key is chosen carefully. The key can be any length, and the longer the key, the more secure the ciphertext will be. The XOR cipher is also reversible, meaning that the original plaintext can be obtained by applying the XOR operation again with the same key.
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
+One advantage of the XOR cipher is that it is very fast to execute, making it suitable for use in real-time applications such as encrypting data transmitted over a network. However, it is also relatively easy to break if the key is not sufficiently long or if the same key is used multiple times.
 
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+```
+function XOR_Encrypt(plaintext, key)
+    key_length = length of key
+    ciphertext = ""
+    for i = 0 to length of plaintext
+        ciphertext += plaintext[i] XOR key[i mod key_length]
+    return ciphertext
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
+function XOR_Decrypt(ciphertext, key)
+    key_length = length of key
+    plaintext = ""
+    for i = 0 to length of ciphertext
+        plaintext += ciphertext[i] XOR key[i mod key_length]
+    return plaintext
 
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
-
-### Code Splitting
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
-
-### Analyzing the Bundle Size
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
-
-### Making a Progressive Web App
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
-
-### Advanced Configuration
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+```
