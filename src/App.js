@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
-import aes128 from './aes128';
-import aes192 from './aes192';
-import aes256 from './aes256';
+import aes128 from './aes/aes128';
+import aes192 from './aes/aes192';
+import aes256 from './aes/aes256';
+import CipherNavbar from './navbar/ChiperNavbar';
 
 const App = () => {
   const [mode, setMode] = useState('aes-128');
@@ -36,6 +37,7 @@ const App = () => {
 
   return (
     <div className="container">
+      <CipherNavbar/>
       <h1>AES Encrypt/Decrypt</h1>
       <div className="form-group">
         <label htmlFor="mode-select">Select AES Mode:</label>
